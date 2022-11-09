@@ -20,6 +20,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const collectionOfServices = client.db('ZeronOne').collection('ZeroOneData');
+        const reviewerCollection = client.db('ZeronOne').collection('reviewers');
         app.get('/services', async (req, res) => {
             const page = parseInt(req.query.page);
             const size = parseInt(req.query.size);
@@ -30,6 +31,13 @@ async function run() {
             const count = await collectionOfServices.estimatedDocumentCount();
             res.send({count,services});
         });
+        // reviewers
+        app.post('/reviewers', async (req, res) => {
+            const review = req.body;
+            const result = await reviewerCollection.insertOne(review);
+            res.send(result);
+        });
+        // 
         app.get('/allservice', async (req, res) => {
             const query = {};
             const cursor = collectionOfServices.find(query);
