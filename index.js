@@ -37,7 +37,19 @@ async function run() {
             const result = await reviewerCollection.insertOne(review);
             res.send(result);
         });
-        // 
+        // review send to client
+        app.get('/reviewers', async (req, res) => {
+            console.log(req.query.serviceId);
+            let query = {};
+            if (req.query.email) {
+                query = {
+                    email: req.query.email,
+                }
+            }
+            const cursor = reviewerCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
         app.get('/allservice', async (req, res) => {
             const query = {};
             const cursor = collectionOfServices.find(query);
