@@ -138,7 +138,13 @@ async function run() {
             }
             const result = await reviewerCollection.updateOne(filter, updatedReview, option);
             res.send(result);
-        })
+        });
+        // add services
+        app.post('/services', async (req, res) => {
+            const newService = req.body;
+            const result = await collectionOfServices.insertOne(newService);
+            res.send(result);
+        });
 
     }
     finally {
