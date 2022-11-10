@@ -69,7 +69,34 @@ async function run() {
             const query = { _id: ObjectId(id) };
             const result = await reviewerCollection.deleteOne(query);
             res.send(result);
+        });
+        
+        // for update review
+        app.get('/update/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await reviewerCollection.findOne(query);
+            res.send(result);
+        });
+        // update review
+        app.put('/update/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const review = req.body;
+            const option = { upsert: true };
+            const updatedReview = {
+                $set: {
+                    email: review.email,
+                    name: review.name,
+                    url: review.url,
+                    ratting: review.ratting,
+                    description: review.description
+                }
+            }
+            const result = await reviewerCollection.updateOne(filter, updatedReview, option);
+            res.send(result);
         })
+
     }
     finally {
         
